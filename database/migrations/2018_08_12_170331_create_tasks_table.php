@@ -1,10 +1,9 @@
 <?php
 
-use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateProjectsTable extends Migration
+class CreateTasksTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,11 +12,16 @@ class CreateProjectsTable extends Migration
      */
     public function up()
     {
-        Schema::create('projects', function (Blueprint $table) {
+        Schema::create('tasks', function (Blueprint $table) {
             $table->increments('id');
             $table->string('name', 255);
+            $table->enum('type', ['bug','feature']);
+            $table->enum('status', ['created', 'assigned', 'progress', 'review', 'test', 'done']);
+            $table->date('deadline');
+            $table->integer('task_id')->comment('Parent');
+            $table->integer('project_id');
             $table->integer('user_id')->comment('Creator');
-            $table->enum('type', ['personal', 'commercial']);
+            $table->integer('assigned_user_id')->comment('Performer');
             $table->timestamps();
         });
     }
@@ -29,6 +33,6 @@ class CreateProjectsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('projects');
+        Schema::dropIfExists('tasks');
     }
 }

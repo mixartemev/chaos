@@ -5,11 +5,11 @@ namespace App;
 use Illuminate\Database\Eloquent\Model;
 
 /**
- * App\Project
+ * App\Task
  *
  * @mixin \Eloquent
  */
-class Project extends Model
+class Task extends Model
 {
     //
 }
