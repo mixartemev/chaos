@@ -6,3 +6,6 @@ php artisan key:generate
 
 php artisan make:model Project -mr
 php artisan make:model Task -mr
+
+php artisan migrate
+php artisan tinker fixtures.php

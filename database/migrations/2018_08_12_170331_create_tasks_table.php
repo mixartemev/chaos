@@ -16,13 +16,14 @@ class CreateTasksTable extends Migration
             $table->increments('id');
             $table->string('name', 255);
             $table->enum('type', ['bug','feature']);
+            $table->enum('sla', ['small', 'middle', 'long'])->nullable(); // must be set on assign
             $table->enum('status', ['created', 'assigned', 'progress', 'review', 'test', 'done'])
                 ->default('created');
-            $table->date('deadline');
-            $table->unsignedInteger('task_id')->comment('Parent');
+            $table->date('deadline')->nullable(); // must be set on progress
+            $table->unsignedInteger('task_id')->nullable()->comment('Parent');
             $table->unsignedSmallInteger('project_id');
             $table->unsignedTinyInteger('user_id')->comment('Creator');
-            $table->unsignedTinyInteger('assigned_user_id')->comment('Performer');
+            $table->unsignedTinyInteger('assigned_user_id')->nullable()->comment('Performer'); // set on assign
             $table->timestamps();
 
             $table->index(['user_id','project_id','task_id','assigned_user_id']);
