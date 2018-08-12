@@ -16,13 +16,24 @@ class CreateTasksTable extends Migration
             $table->increments('id');
             $table->string('name', 255);
             $table->enum('type', ['bug','feature']);
-            $table->enum('status', ['created', 'assigned', 'progress', 'review', 'test', 'done']);
+            $table->enum('status', ['created', 'assigned', 'progress', 'review', 'test', 'done'])
+                ->default('created');
             $table->date('deadline');
-            $table->integer('task_id')->comment('Parent');
-            $table->integer('project_id');
-            $table->integer('user_id')->comment('Creator');
-            $table->integer('assigned_user_id')->comment('Performer');
+            $table->unsignedInteger('task_id')->comment('Parent');
+            $table->unsignedSmallInteger('project_id');
+            $table->unsignedTinyInteger('user_id')->comment('Creator');
+            $table->unsignedTinyInteger('assigned_user_id')->comment('Performer');
             $table->timestamps();
+
+            $table->index(['user_id','project_id','task_id','assigned_user_id']);
+            $table->foreign('project_id')->references('id')->on('projects')
+                ->onDelete('cascade')->onUpdate('cascade');
+            $table->foreign('task_id')->references('id')->on('tasks')
+                ->onDelete('cascade')->onUpdate('cascade');
+            $table->foreign('user_id')->references('id')->on('users')
+                ->onDelete('cascade')->onUpdate('cascade');
+            $table->foreign('assigned_user_id')->references('id')->on('users')
+                ->onDelete('cascade')->onUpdate('cascade');
         });
     }
 
